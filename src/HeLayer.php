@@ -2,19 +2,42 @@
 
 namespace FKosmala\PHPHeTools;
 
+/**
+* HeLayer class contains every functions for HiveEngine node communication.
+* php-curl must be needed.
+*/
 class HeLayer
 {
-    // Toggle to true if you want to display the query & the result
+    /**
+    * If true, display the query & the result. Default: false
+    * @var bool $debug
+    */
     private $debug = false;
 
-    // Default node for query HiveEngine API
+    /**
+    * Default node for query HiveEngine API
+    * @var string $heNode
+    */
     private $heNode = "api.hive-engine.com/rpc";
 
+    /**
+    * Throwing exception when error
+    * @var bool $throw_exception
+    */
     private $throw_exception = false;
 
-    // Force Scheme with HTTPS
+    /**
+    * Use HTTPS scheme by default
+    * @var string $scheme
+    */
     private $scheme = 'https://';
 
+    /**
+    * Constructor to use Hive Engine Api with config
+    *
+    * @param array $heConfig Configuration array
+    * @return void
+    */
     public function __construct($heConfig = array())
     {
 
@@ -31,6 +54,16 @@ class HeLayer
         }
     }
 
+    /**
+    * Create the JSON object for normal request
+    *
+    * @param string $method Method to get data : find / find_one / get_contract, ...
+    * @param string $contract Name of the selected contract
+    * @param string $table Name of the table
+    * @param string $query Executed query
+    * @param integer $limit Maximum number of results
+    * @return string $request_json JSON object ready to be send by curl() function
+    */
     public function getRequest($method, $contract, $table, $query, $limit = 1)
     {
         $request = array(
@@ -54,6 +87,14 @@ class HeLayer
         return $request_json;
     }
 
+    /**
+    * Create the JSON object for RPC request
+    *
+    * @param string $method Used method to get data from HiveEngine
+    * @param array $params Array of parameters
+    *
+    * @return string $request_json JSON object ready to use with curl() function
+    */
     public function getRPCRequest($method, $params = array())
     {
         $request = array(
@@ -72,6 +113,14 @@ class HeLayer
         return $request_json;
     }
 
+    /**
+    * Execute the cURL query and return the response JSON object
+    *
+    * @param string $data JSON object send to Hive Engine selected node
+    * @param string $endpoint (optional) Selected endpoint to execute the query
+    *
+    * @return string $result result JSON object
+    **/
     public function curl($data, $endpoint)
     {
         $ch = curl_init();
@@ -90,6 +139,15 @@ class HeLayer
         return $result;
     }
 
+    /**
+    * Function to generate JSON object for (RPC) request, execute the query with curl(), and return the results
+    *
+    * @param string $method Method
+    * @param array $params Array of parameters
+    * @param string $endpoint Endpoint where the query will be executed
+    *
+    * @return string $response JSON object from HiveEngine response
+    */
     public function call($method, $params = array(), $endpoint = "/contracts")
     {
         if (!empty($params['contract'])) {
@@ -115,6 +173,15 @@ class HeLayer
         return $response['result'];
     }
 
+    /**
+    * Function to get Hive Engine history for an account or a token
+    *
+    * @param string $account Hive account
+    * @param string $token Hive Engine token name
+    * @param integer $limit MAximum number of result
+    *
+    * @return string $response JSON object of HiveEngine response
+    */
     public function callHistory($account = null, $token = null, $limit = 100)
     {
         $heHistory = "https://accounts.hive-engine.com/accountHistory";

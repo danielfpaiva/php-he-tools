@@ -4,16 +4,33 @@ namespace FKosmala\PHPHeTools;
 
 use FKosmala\PHPHeTools\HeLayer;
 
+/**
+* HeApi contains every PHP functions to receive HiveEngine data.
+**/
 class HeApi
 {
+    /**
+    * Needed layer for Hive Engine communication
+    */
     private $HeLayer;
 
+    /**
+    * Constructor to apply the config array
+    *
+    * @param array $heConfig Configuration Array
+    *
+    * @return void
+    */
     public function __construct($heConfig = null)
     {
         $this->HeLayer = new HeLayer($heConfig);
     }
 
-    // Methods related to the "/blockchain" endpoint
+    /**
+    * Get the status of the selected heNode
+    *
+    * @return string $result JSON format : State of selected node
+    **/
     public function getStatus()
     {
         $params = array();
@@ -21,6 +38,11 @@ class HeApi
         return $result;
     }
 
+    /**
+    * Get the Latest block data : timestamp, txs, hash, ...
+    *
+    * @return string $result JSON format : Last block data
+    **/
     public function getLatestBlockInfo()
     {
         $params = array();
@@ -28,6 +50,13 @@ class HeApi
         return $result;
     }
 
+    /**
+    * Get selected block data : timestamp, txs, hash, ...
+    *
+    * @param string $block selected block ID
+    *
+    * @return string $result JSON format : selected block data
+    **/
     public function getBlockInfo($block)
     {
         $params = array(
@@ -37,6 +66,13 @@ class HeApi
         return $result;
     }
 
+    /**
+    * Get selected tx data : timestamp, hash, amount, ...
+    *
+    * @param string $txid selected block ID
+    *
+    * @return string $result JSON format: selected tx data
+    **/
     public function getTransactionInfo($txid)
     {
         $params = array(
@@ -46,7 +82,14 @@ class HeApi
         return $result;
     }
 
-    // Delegation methods
+    /**
+    * Get all delegations from selected account. Optional : only one token
+    *
+    * @param string $account Selected HIVE account
+    * @param string $token Optional : filter with only selected token
+    *
+    * @return string $result JSON format response
+    **/
     public function getDelegationFrom($account, $token = null)
     {
         if ($token != null) {
@@ -66,6 +109,14 @@ class HeApi
         return $result;
     }
 
+    /**
+    * Get all delegations to selected account. Optional : only one token
+    *
+    * @param string $account Selected HIVE account
+    * @param string $token Optional : filter with only selected token
+    *
+    * @return string $result JSON format response
+    **/
     public function getDelegationTo($account, $token = null)
     {
         if ($token != null) {
@@ -86,6 +137,14 @@ class HeApi
         return $result;
     }
 
+    /**
+    * Get pending undelegations from selected account. Optional : only one token
+    *
+    * @param string $account Selected HIVE account
+    * @param string $token Optional : filter with only selected token
+    *
+    * @return string $result JSON format response
+    **/
     public function getPendingUndelegations($account, $token = null)
     {
         if ($token != null) {
@@ -113,7 +172,13 @@ class HeApi
         return $result;
     }
 
-    // Account related methods
+    /**
+    * Get selected account Hive Engine tokens balance
+    *
+    * @param string $account Selected HIVE account
+    *
+    * @return string $result JSON format response
+    **/
     public function getAccountBalance($account)
     {
         $params = array(
@@ -128,6 +193,13 @@ class HeApi
         return $result;
     }
 
+    /**
+    * Get selected account Hive Engine history
+    *
+    * @param string $account Selected HIVE account
+    *
+    * @return string $result JSON format response
+    **/
     public function getAccountHistory($account, $token = null, $limit = 100)
     {
         if ($token != null) {
