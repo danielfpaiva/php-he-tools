@@ -6,9 +6,9 @@ use FKosmala\PHPHeTools\HeApi as HeApi;
 
 // Create config array with settings
 $config = [
-	"debug" => false,
-	'throw_exception' => false,
-	"heNode" => "api2.hive-engine.com/rpc"
+  "debug" => false,
+  'throw_exception' => false,
+  "heNode" => "api2.hive-engine.com/rpc"
 ];
 
 // Init HiveEngine API with config array
@@ -22,4 +22,3 @@ $result = $api->getAccountTokens($account);
 
 // Display the result
 print_r($result);
-?>
