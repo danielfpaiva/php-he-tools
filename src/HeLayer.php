@@ -130,6 +130,12 @@ class HeLayer
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 
+        if ($this->debug) {
+            // this it is necessary because local machines may not have SSL certificates
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        }
+
         $result = curl_exec($ch);
 
         if ($this->debug) {
